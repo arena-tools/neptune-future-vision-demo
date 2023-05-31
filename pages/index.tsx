@@ -1,10 +1,20 @@
-import { useRouter } from 'next/router';
-import Head from 'next/head';
 import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import isMobile from 'ismobilejs';
+import Layout from '../components/layout'
+import HelmMap from '../components/helmMap';
 
-function Layout({
+// basic map styling
+const helmMapStyle = {
+    mapStyle: 'mapbox://styles/mlgardner/clh9imalh01vm01p497p37a4p',
+    mapboxAccessToken:
+        'pk.eyJ1IjoibWxnYXJkbmVyIiwiYSI6ImNsaDlpZ3A5djA3cW0zdG4wYjV6YzJ1MmQifQ._ir1PzfXjLH-jsiyqUdt-A',
+};
+
+
+
+
+function Home({
     children,
     title,
     className,
@@ -16,26 +26,14 @@ function Layout({
     const mobile = isMobile().phone;
 
     return (
-        <div className="dark">
-            <Head>
-                <title>Hi {title}</title>
-                <link rel="shortcut icon" href="images/favicon.png" />
-            </Head>
-            <div className="flex">
-                <div
-                    className={classNames(`p-4 ml-20 grow`, className, {
-                        '!ml-0 max-w-[100vw] overflow-auto': mobile,
-                    })}
-                >
+       <Layout
+        title="Welcome"
+       >
+        Something something
 
-asdfashflkajsdfhlaks
-
-                    {children}
-
-                </div>
-            </div>
-        </div>
+        <HelmMap />
+       </Layout>
     );
 }
 
-export default Layout;
+export default Home;
