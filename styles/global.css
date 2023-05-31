@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: 'Manrope';
+        src: url('../public/fonts/manrope/Manrope-ExtraBold.otf') format('opentype'),
+            url('../public/fonts/manrope/Manrope-ExtraBold.woff2') format('woff2'),
+            url('../public/fonts/manrope/Manrope-ExtraBold.ttf') format('truetype');
+        font-weight: 800;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Manrope';
+        src: url('../public/fonts/manrope/Manrope-Bold.otf') format('opentype'),
+            url('../public/fonts/manrope/Manrope-Bold.woff2') format('woff2'),
+            url('../public/fonts/manrope/Manrope-Bold.ttf') format('truetype');
+        font-weight: bold;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Manrope';
+        src: url('../public/fonts/manrope/Manrope-Regular.otf') format('opentype'),
+            url('../public/fonts/manrope/Manrope-Regular.woff2') format('woff2'),
+            url('../public/fonts/manrope/Manrope-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Manrope';
+        src: url('../public/fonts/manrope/Manrope-SemiBold.otf') format('opentype'),
+            url('../public/fonts/manrope/Manrope-SemiBold.woff2') format('woff2'),
+            url('../public/fonts/manrope/Manrope-SemiBold.ttf') format('truetype');
+        font-weight: 600;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Manrope';
+        src: url('../public/fonts/manrope/Manrope-Light.otf') format('opentype'),
+            url('../public/fonts/manrope/Manrope-Light.woff2') format('woff2'),
+            url('../public/fonts/manrope/Manrope-Light.ttf') format('truetype');
+        font-weight: 300;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Manrope';
+        src: url('../public/fonts/manrope/Manrope-SemiBold.otf') format('opentype'),
+            url('../public/fonts/manrope/Manrope-SemiBold.woff2') format('woff2'),
+            url('../public/fonts/manrope/Manrope-SemiBold.ttf') format('truetype');
+        font-weight: 600;
+        font-display: swap;
+    }
+
+    /* :root {
+        --primary-color: #fff;
+        --secondary-color: #181d24;
+        --secondary-bg: #b8c7e1;
+        --shadow: 214, 229, 245;
+    }
+    @media (prefers-color-scheme: dark) {
+    ? Uncommenting this will control the color scheme of the app. 
+    ! The Scheme Needs More Work
+    ? Move ⬇ root here
+    }
+*/
+    :root {
+        --primary-color: #1a1f26;
+        --secondary-color: #e8e8e8;
+        --border-color: #515674;
+        --secondary-bg: #2a2f36;
+        --shadow: 64, 68, 74;
+    }
+}
+@layer components {
+    @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+        .glass-effect {
+            /* From https://css.glass */
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5.5px);
+            -webkit-backdrop-filter: blur(5.5px);
+        }
+    }
+
+    /* fallback for Firefox (not supporting backdrop-filter) */
+    @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+        .glass-effect {
+            background-color: rgba(var(--shadow), 0.6) !important;
+        }
+    }
+}
+html,
+body,
+#__next {
+    font-family: Manrope, system-ui, sans-serif;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+/* Tailwindcss pre-flight interferes with Mantine button components visibility.
+In order to fix that we need to disabling pre-flight in the config, which leads to
+an additional 8px margin on the body. This is a hack to offset that margin */
+body,
+main {
+    padding: 0;
+    margin: 0;
+}
+
+*,
+::before,
+::after {
+    border-width: 0;
+    border-style: solid;
+    /* border-color:rgba(255, 255, 255, 0.3); */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+@keyframes terminal {
+    from {
+        transform: translate(100%);
+    }
+    to {
+        transform: translate(-100%);
+    }
+}
+
+@keyframes globeDotLayer {
+    from {
+        width: 0px;
+    }
+    50% {
+        width: 100px;
+    }
+    to {
+        width: 0px;
+    }
+}
+
+@keyframes eventCard {
+    from {
+        transform: translate(500px);
+    }
+    33% {
+        transform: translate(0px);
+    }
+    85% {
+        transform: translate(0px);
+    }
+    to {
+        transform: translate(0px, 200px);
+    }
+}
+
+.hideScroll::-webkit-scrollbar {
+    display: none;
+}
+.hideScroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+    .glass-effect {
+        backdrop-filter: blur(17px);
+    }
+}
+
+/* fallback for Firefox (not supporting backdrop-filter) */
+@supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    .glass-effect {
+        background-color: rgba(var(--shadow), 0.6) !important;
+    }
+}
+
+.mapbox-logo {
+    display: none;
+}
+.mapboxgl-ctrl-logo {
+    display: none !important;
+}
+.mapbox-improve-map {
+    display: none;
+}
+.mapboxgl-ctrl-compass {
+    display: none;
+}
+
+.helm-scrollbar ::-webkit-scrollbar-track,
+.helm-scrollbar ::-webkit-scrollbar,
+.helm-scrollbar ::-webkit-scrollbar-thumb {
+    width: 0;
+    background-color: transparent;
+}
+
+.inner-shadow-bottom::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-image: linear-gradient(to top, #e4e4e8, transparent);
+    pointer-events: none;
+}
+
+.ai-assistant-btn {
+    background: linear-gradient(
+        112.87deg,
+        rgba(230, 236, 242, 0.3) 0%,
+        rgba(240, 234, 243, 0.3) 100%
+    );
+    border-width: 0.5px 0px 0px 0.5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 8px 8px 16px rgba(10, 12, 15, 0.05);
+    backdrop-filter: blur(8px);
+    /* Note: backdrop-filter has minimal browser support */
+    border-radius: 36px;
+}
+
+/* todo: is there a better way? */
+.helm-custom-product-multiselect .mantine-ScrollArea-root,
+.helm-custom-product-multiselect .mantine-MultiSelect-dropdown {
+    height: 500px;
+}
