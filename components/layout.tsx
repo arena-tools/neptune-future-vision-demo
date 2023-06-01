@@ -3,14 +3,14 @@ import Head from 'next/head';
 import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import isMobile from 'ismobilejs';
+import { Logo } from './ArenaLogo';
+import ChatBox from './ChatBox';
 
 function Layout({
     children,
-    title,
     className,
 }: {
     children: React.ReactNode;
-    title: string;
     className?: string;
 }) {
     const mobile = isMobile().phone;
@@ -18,9 +18,11 @@ function Layout({
     return (
         <div className="light">
             <Head>
-                <title>Hi {title}</title>
+                <title>OneBrain</title>
                 <link rel="shortcut icon" href="images/favicon.png" />
             </Head>
+            <Logo />
+            <ChatBox />
             <div className="flex">
                 <div
                     className={classNames(`p-4 ml-20 grow`, className, {

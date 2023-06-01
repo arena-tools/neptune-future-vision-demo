@@ -26,11 +26,7 @@ function Home({
     const mobile = isMobile().phone;
 
     return (
-       <Layout
-        title="Welcome"
-       >
-        Something something
-
+       <Layout>
         <HelmMap />
        </Layout>
     );
