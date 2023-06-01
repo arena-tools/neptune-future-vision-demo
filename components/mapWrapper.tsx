@@ -62,7 +62,7 @@ const MapWrapper = (
             </DeckGL>
             {legend && (
                 <div className="absolute bg-[#272A31] bottom-6 right-6 rounded-md">
-                    No no, you're a legend.
+                    Legend.
                 </div>
             )}
             {children && children}
