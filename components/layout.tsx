@@ -3,8 +3,8 @@ import Head from 'next/head';
 import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import isMobile from 'ismobilejs';
-import { Logo } from './ArenaLogo';
 import ChatBox from './ChatBox';
+import PageHeader from './PageHeader';
 
 function Layout({
     children,
@@ -21,8 +21,8 @@ function Layout({
                 <title>OneBrain</title>
                 <link rel="shortcut icon" href="images/favicon.png" />
             </Head>
-            <Logo />
-            <ChatBox />
+            <PageHeader />
+            {/* <ChatBox /> */}
             <div className="flex">
                 <div
                     className={classNames(`p-4 ml-20 grow`, className, {

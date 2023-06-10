@@ -236,13 +236,6 @@ main {
     height: 500px;
 }
 
-.arena-logo {
-    position: relative;
-    z-index: 10;
-    top: 10px;
-    left: 10px;
-}
-
 .chat-box {
     position: absolute;
     width: 60%;

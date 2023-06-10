@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import isMobile from 'ismobilejs';
-import Layout from '../components/layout'
+import Layout from '../components/layout';
 import HelmMap from '../components/helmMap';
 
 // basic map styling
@@ -10,9 +10,6 @@ const helmMapStyle = {
     mapboxAccessToken:
         'pk.eyJ1IjoibWxnYXJkbmVyIiwiYSI6ImNsaDlpZ3A5djA3cW0zdG4wYjV6YzJ1MmQifQ._ir1PzfXjLH-jsiyqUdt-A',
 };
-
-
-
 
 function Home({
     children,
@@ -24,11 +21,14 @@ function Home({
     className?: string;
 }) {
     const mobile = isMobile().phone;
+    const [zoom, setZoom] = useState(null);
+    // const layerVisible = useMemo(() => zoom > ZOOM_THRESHOLD, [zoom]);
+
 
     return (
-       <Layout>
-        <HelmMap />
-       </Layout>
+        <Layout>
+            <HelmMap setZoom={setZoom}/>
+        </Layout>
     );
 }
 
