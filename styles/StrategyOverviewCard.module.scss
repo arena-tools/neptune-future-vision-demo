@@ -1,0 +1,73 @@
+.strategyCard {
+
+    display: flex;
+    flex-direction: column;
+    width: 415px;
+
+    color: #515674;
+
+    background: linear-gradient(112.87deg, #edf2f7 0%, #e7deee 100%), #d9d9d9;
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px 20px 20px 20px;
+
+    .cardContentContainer {
+
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        font-family: 'Manrope';
+        height: 500px;
+        font-size: 14px;
+
+        .stratList {
+            
+        }
+
+        .graph {
+
+        }
+
+        .strategyName {
+            font-size: 16px;
+            padding-bottom: 40px;
+            // font-weight: bold;
+        }
+
+        .goalName {
+
+        }
+
+        .productNames {
+
+        }
+
+        .regionNames {
+
+        }
+
+        .levers {
+
+        }
+
+        .title {
+            font-size: 12px;
+            color: #B1B5C1;
+            padding-top: 15px;
+        }
+    }
+
+    .strategyButton {
+        font-size: 12px;
+        font-weight: medium;
+        display: flex;
+        grid-gap: 5px;
+        justify-self: end;
+    }
+
+
+}
