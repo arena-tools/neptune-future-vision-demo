@@ -17,6 +17,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
+    "@mantine/carousel": "^6.0.13",
     "@mantine/core": "^6.0.11",
     "@mantine/dates": "^6.0.11",
     "@mantine/form": "^6.0.11",
@@ -46,6 +47,7 @@
     "d3": "^7.8.4",
     "dayjs": "^1.11.7",
     "deck.gl": "^8.9.16",
+    "embla-carousel-react": "^7.1.0",
     "framer-motion": "^10.12.16",
     "ismobilejs": "^1.1.1",
     "json2csv": "^5.0.7",

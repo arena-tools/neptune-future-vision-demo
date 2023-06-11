@@ -23,7 +23,7 @@ function Layout({
             </Head>
             <PageHeader />
             {/* <ChatBox /> */}
-            <div className="flex">
+            <div className="flex h-screen w-full bg-[#eeecf6] overflow-hidden relative">
                 <div
                     className={classNames(`p-4 ml-20 grow`, className, {
                         '!ml-0 max-w-[100vw] overflow-auto': mobile,

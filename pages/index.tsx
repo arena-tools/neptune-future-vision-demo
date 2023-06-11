@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import isMobile from 'ismobilejs';
 import Layout from '../components/layout';
 import HelmMap from '../components/helmMap';
+import StrategyCardContainer from '../components/StrategyCardContainer';
 
 // basic map styling
 const helmMapStyle = {
@@ -27,7 +28,8 @@ function Home({
 
     return (
         <Layout>
-            <HelmMap setZoom={setZoom}/>
+            <StrategyCardContainer />
+            <HelmMap />
         </Layout>
     );
 }

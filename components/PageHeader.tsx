@@ -25,7 +25,7 @@ const PageHeader = () => {
                 <div className={styles.switchContainer}>
                     <Group position="center">
                         <div>Agent</div>
-                        <Switch size="xl" color={theme.colorScheme === 'dark' ? 'gray' : 'dark'} />
+                        <Switch size="xl" color={theme.colors.hotPink[0]} />
                         <div>Oracle</div>
                     </Group>
                 </div>

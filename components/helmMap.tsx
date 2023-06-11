@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { FlyToInterpolator } from '@deck.gl/core';
+import { FlyToInterpolator, LinearInterpolator } from '@deck.gl/core';
 import { ScatterplotLayer } from '@deck.gl/layers/typed';
 import MapWrapper from './mapWrapper';
 
@@ -7,6 +7,7 @@ enum CountryOptions {
     Ecuador = 'EC',
     Phillipines = 'PH',
 }
+
 
 const helmMapStyle = {
     mapStyle: 'mapbox://styles/mlgardner/clh9imalh01vm01p497p37a4p',
@@ -26,7 +27,7 @@ const countryDefaultViewports: Record<CountryOptions, { latitude: number; longit
 };
 
 const defaultViewPort = {
-    zoom: 6,
+    zoom: 2.5,
     pitch: 0,
     bearing: 0,
     transitionDuration: 1000,
@@ -65,14 +66,28 @@ const HelmMap = ({ layer, children, setZoom }: HelmMapProps) => {
         }
     }, [setZoom, viewPort.zoom]);
 
+    const transitionInterpolator = new LinearInterpolator(['longitude']);
+
+    const rotateCamera = useCallback(() => {
+        setViewPort(viewPort => ({
+          ...viewPort,
+          longitude: viewPort.longitude + 120,
+          transitionDuration: 15000,
+          transitionInterpolator,
+          onTransitionEnd: rotateCamera
+        }))
+      }, []);
+
+    
     return (
         <MapWrapper
             projection="globe"
             {...helmMapStyle}
-            // layers={layer}
+            layers={layer}
             viewPort={viewPort}
             onViewportChange={onViewStateChange}
-            getCursor={({ isHovering }) => (isHovering ? 'pointer' : null)}
+            getCursor={({ isHovering }) => (isHovering ? 'pointer' : 'grab')}
+            onLoad={rotateCamera}
         >
             {children}
         </MapWrapper>
