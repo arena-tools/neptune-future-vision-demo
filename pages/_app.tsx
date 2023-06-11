@@ -12,6 +12,10 @@ export default function App({ Component, pageProps }: AppProps) {
             theme={{
                 colorScheme: 'light',
                 fontFamily: 'inherit',
+                colors: {
+                    hotPink: ['#F11B97'],
+                    mildPink: ['#F2CFE7'],
+                },
                 headings: {
                     fontFamily: 'inherit',
                     fontWeight: '500',
@@ -25,6 +29,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     },
                 },
                 components: {
+                    
                     Modal: {
                         classNames: {
                             overlay: 'z-[500]',
