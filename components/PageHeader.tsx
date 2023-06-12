@@ -4,6 +4,7 @@ import { Switch, Group, useMantineTheme } from '@mantine/core';
 import { MagnifyingGlass, Detective } from '@phosphor-icons/react';
 import { Image } from '@mantine/core';
 import styles from '../styles/PageHeader.module.scss';
+import {sendEvent, SiteModeEvents, SiteModes} from '../utils/events';
 
 const PageHeader = () => {
     const theme = useMantineTheme();
@@ -25,7 +26,9 @@ const PageHeader = () => {
                 <div className={styles.switchContainer}>
                     <Group position="center">
                         <div>Agent</div>
-                        <Switch size="xl" color={theme.colors.hotPink[0]} />
+                        <Switch size="xl" color={theme.colors.hotPink[0]} onChange={(evt) => {
+                            return sendEvent(SiteModeEvents.onSiteSwitchFlipped, evt.currentTarget.checked === true ? SiteModes.Oracle : SiteModes.Agent);
+                        }} />
                         <div>Oracle</div>
                     </Group>
                 </div>

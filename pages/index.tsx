@@ -1,9 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import isMobile from 'ismobilejs';
-import Layout from '../components/layout';
+import Head from 'next/head';
+import PageHeader from '../components/PageHeader';
+import ChatBox from '../components/ChatBox';
+
+import { useRouter } from 'next/router';
 import HelmMap from '../components/helmMap';
 import StrategyCardContainer from '../components/StrategyCardContainer';
+import { sendEvent, SiteModeEvents, SiteModes } from '../utils/events';
 
 // basic map styling
 const helmMapStyle = {
@@ -22,15 +27,46 @@ function Home({
     className?: string;
 }) {
     const mobile = isMobile().phone;
-    const [zoom, setZoom] = useState(null);
-    // const layerVisible = useMemo(() => zoom > ZOOM_THRESHOLD, [zoom]);
+
+    // default zooom is 2.5 (globe)
+    const [zoom, setZoom] = useState(2.5);
+
+    // the default setting of the toggle switch is Agent
+    const [siteMode, setSideMode] = useState(SiteModes.Agent);
+
+    const onSwitchFlipped = evt => {
+        console.log('Switch flipped: ', evt.detail);
+        setSideMode(evt.detail);
+    };
+
+    useEffect(() => {
+        document.addEventListener(SiteModeEvents.onSiteSwitchFlipped, evt => onSwitchFlipped(evt));
+        return document.removeEventListener(SiteModeEvents.onSiteSwitchFlipped, evt =>
+            onSwitchFlipped(evt),
+        );
+    }, []);
+
+    // when the switch is flipped TO Agent, reset zoom to global zoom
 
 
     return (
-        <Layout>
-            <StrategyCardContainer />
-            <HelmMap />
-        </Layout>
+        <div className="light">
+            <Head>
+                <title>OneBrain</title>
+                <link rel="shortcut icon" href="images/favicon.png" />
+            </Head>
+            <PageHeader />
+            <div className="flex h-screen w-full bg-[#eeecf6] overflow-hidden relative">
+                <div
+                    className={classNames(`p-4 ml-20 grow`, className, {
+                        '!ml-0 max-w-[100vw] overflow-auto': mobile,
+                    })}
+                >
+                    {siteMode === SiteModes.Agent ? <StrategyCardContainer /> : <ChatBox />}
+                    <HelmMap />
+                </div>
+            </div>
+        </div>
     );
 }
 

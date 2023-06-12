@@ -261,3 +261,14 @@ main {
     overflow-y: scroll;
     max-height: 100%;
 }
+
+.mantine-Switch-thumb {
+    background-color: #F11B97;
+    border: none; 
+}
+
+input:checked+.mantine-Swith-track, .mantine-Switch-track {
+    background-color: #F2CFE7 !important;
+    border: none;
+}
+

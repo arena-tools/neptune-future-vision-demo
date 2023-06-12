@@ -5,6 +5,7 @@ import { MantineProvider } from '@mantine/core';
 import { useEffect, useRef } from 'react';
 import isMobile from 'ismobilejs';
 
+
 export default function App({ Component, pageProps }: AppProps) {
     return (
         <MantineProvider
@@ -29,7 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     },
                 },
                 components: {
-                    
+
                     Modal: {
                         classNames: {
                             overlay: 'z-[500]',
