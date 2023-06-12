@@ -236,32 +236,6 @@ main {
     height: 500px;
 }
 
-.chat-box {
-    position: absolute;
-    width: 60%;
-    height: 95%;
-    right: 0px;
-    bottom: 0px;
-    z-index: 10;
-    padding-top: 30px;
-    padding-left: 30px;
-    padding-right: 30px;
-    /* From https://css.glass */
-    background: linear-gradient(112.87deg, #edf2f7 0%, #e7deee 100%), #d9d9d9;
-
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 16px 0px 0px 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.chat-container {
-    overflow-y: scroll;
-    max-height: 100%;
-}
-
 .mantine-Switch-thumb {
     background-color: #F11B97;
     border: none; 
