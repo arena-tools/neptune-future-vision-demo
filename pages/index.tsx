@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import isMobile from 'ismobilejs';
 import Head from 'next/head';
@@ -8,7 +8,8 @@ import ChatBox from '../components/ChatBox';
 import { useRouter } from 'next/router';
 import HelmMap from '../components/helmMap';
 import StrategyCardContainer from '../components/StrategyCardContainer';
-import { sendEvent, SiteModeEvents, SiteModes } from '../utils/events';
+
+import { SiteModeEvents, MapEvents, SiteModes } from '../utils/events';
 
 // basic map styling
 const helmMapStyle = {
@@ -28,12 +29,11 @@ function Home({
 }) {
     const mobile = isMobile().phone;
 
-    // default zooom is 2.5 (globe)
-    const [zoom, setZoom] = useState(2.5);
-
+    // - ----------------- Switch ------------------------------------------
     // the default setting of the toggle switch is Agent
     const [siteMode, setSideMode] = useState(SiteModes.Agent);
 
+    // toggling master switch between agent and oracle
     const onSwitchFlipped = evt => {
         console.log('Switch flipped: ', evt.detail);
         setSideMode(evt.detail);
@@ -46,7 +46,47 @@ function Home({
         );
     }, []);
 
-    // when the switch is flipped TO Agent, reset zoom to global zoom
+    // - ----------------- Zoom Changes ------------------------------------------
+    // default zooom is 2.5 (globe)
+    const [zoom, setZoom] = useState(2.5);
+    
+    const onZoomEvent = evt => {
+       setZoom(evt.detail);
+       console.log(evt.detail)
+    };
+
+    useEffect(() => {
+        document.addEventListener(MapEvents.onZoomRequested, evt => onZoomEvent(evt));
+        return document.removeEventListener(MapEvents.onZoomRequested, evt => onZoomEvent(evt));
+    }, [zoom]);
+
+    // - ----------------- Viewport Changes ------------------------------------------
+    // default viewport is EC, all viewport definitions are in helmMap.tsx
+    const [viewport, setViewport] = useState(undefined);
+
+    const onViewPortChanged = evt => {
+        console.log('Viewport Change Requested:', evt.detail);
+        setViewport(evt.detail);
+    }
+
+    useEffect(()=> {
+        document.addEventListener(MapEvents.onViewPortChanged, evt=> onViewPortChanged(evt));
+        return document.removeEventListener(MapEvents.onViewPortChanged, evt=> onViewPortChanged(evt));
+    },[]);
+
+    // - ----------------- Layer Changes ------------------------------------------
+    const [mapLayer, setMapLayer] = useState(undefined);
+
+    const onMapLayerChanged = evt => {
+        console.log('Map Layer Change Requested: ', evt.detail);
+        setMapLayer(evt.detail);
+    }
+
+    useEffect(()=> {
+        document.addEventListener(MapEvents.onLayerChanged, evt=>onMapLayerChanged(evt));
+        return document.removeEventListener(MapEvents.onLayerChanged, evt=> onMapLayerChanged(evt));
+    })
+    // ----------------------------------------------------------------------------------------------
 
 
     return (
@@ -63,7 +103,7 @@ function Home({
                     })}
                 >
                     {siteMode === SiteModes.Agent ? <StrategyCardContainer /> : <ChatBox />}
-                    <HelmMap />
+                    <HelmMap newZoomValue={zoom} />
                 </div>
             </div>
         </div>

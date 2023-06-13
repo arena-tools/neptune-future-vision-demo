@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import { Carousel } from '@mantine/carousel';
 import StrategyOverviewCard from './StrategyOverviewCard';
 import styles from '../styles/StrategyCardContainer.module.scss';
+import { Image } from '@mantine/core';
+import { sendEvent, SiteModeEvents, MapEvents, SiteModes } from '../utils/events';
 
 const StrategyCardContainer = () => {
     return (
@@ -15,17 +17,45 @@ const StrategyCardContainer = () => {
                 slidesToScroll={1}
                 withControls={false}
             >
-                <Carousel.Slide>
+                <Carousel.Slide
+                    onClick={e => {
+                        console.log('clicked');
+                        sendEvent(MapEvents.onZoomRequested, 12);
+                    }}
+                >
                     <StrategyOverviewCard
-                        lineGraph=""
+                        lineGraph={
+                            <Image
+                                maw={240}
+                                mx="auto"
+                                radius="md"
+                                src="/Strat1.png"
+                                alt="Increase Coverage KitKat"
+                            />
+                        }
                         strategyName="Increase Coverage KitKat All SKUS"
                         goalName="Increase Coverage"
                         productNames="KitKat 12pack"
                         regionNames="Quito"
                         leverNames={['BEES Force', 'BEES Grow', 'BEES Customer']}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                          }}
+                    />
+                </Carousel.Slide>
+                <Carousel.Slide>
+                    <StrategyOverviewCard
+                        lineGraph={
+                            <Image
+                                maw={240}
+                                mx="auto"
+                                radius="md"
+                                src="/Strat2.png"
+                                alt="Increase Coverage KitKat"
+                            />
+                        }
+                        strategyName="Increase Coverage KitKat All SKUS"
+                        goalName="Increase Coverage"
+                        productNames="KitKat 12pack"
+                        regionNames="Quito"
+                        leverNames={['BEES Force', 'BEES Grow', 'BEES Customer']}
                     />
                 </Carousel.Slide>
                 <Carousel.Slide>
@@ -36,22 +66,6 @@ const StrategyCardContainer = () => {
                         productNames="KitKat 12pack"
                         regionNames="Quito"
                         leverNames={['BEES Force', 'BEES Grow', 'BEES Customer']}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                    />
-                </Carousel.Slide>
-                <Carousel.Slide>
-                    <StrategyOverviewCard
-                        lineGraph=""
-                        strategyName="Increase Coverage KitKat All SKUS"
-                        goalName="Increase Coverage"
-                        productNames="KitKat 12pack"
-                        regionNames="Quito"
-                        leverNames={['BEES Force', 'BEES Grow', 'BEES Customer']}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                          }}
                     />
                 </Carousel.Slide>
             </Carousel>

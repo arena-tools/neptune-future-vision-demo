@@ -7,7 +7,12 @@ enum SiteModeEvents {
     onSiteSwitchFlipped = 'evtSiteSwitch',
     onOracleSelected = 'evtOracleSelected',
     onAgentSelected = 'evtAgentSelected',
-    
+}
+
+enum MapEvents {
+    onZoomRequested = 'evtZoomEvent',
+    onViewPortChanged = 'evtViewPortChanged',
+    onLayerChanged = 'evtLayerChanged',
 }
 
 function sendEvent(eventName, dataObj) {
@@ -15,4 +20,4 @@ function sendEvent(eventName, dataObj) {
     document.dispatchEvent(new CustomEvent(eventName, { detail: dataObj }));
 }
 
-export {SiteModeEvents, SiteModes, sendEvent}
+export {SiteModeEvents, SiteModes, MapEvents, sendEvent}

@@ -9,6 +9,8 @@
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
+    // bees color
+    border-left: 4px solid #FDFF35;
 
     .logoContainer {
         display: flex;
@@ -37,6 +39,7 @@
             .pageType {
                 color: #81859b;
                 font-size: 15.5px;
+                line-height: 12px;
             }
 
             .welcome {
