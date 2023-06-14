@@ -4,7 +4,17 @@ import { Carousel } from '@mantine/carousel';
 import StrategyOverviewCard from './StrategyOverviewCard';
 import styles from '../styles/StrategyCardContainer.module.scss';
 import { Image } from '@mantine/core';
-import { sendEvent, SiteModeEvents, MapEvents, SiteModes } from '../utils/events';
+import { sendEvent, MapEvents } from '../utils/events';
+
+import QuitoIcon from './RegionTiles/Quito.svg';
+import CostaCentroIcon from './RegionTiles/CostaCentro.svg';
+import CostaNorteIcon from './RegionTiles/CostaNorte.svg';
+import CostaSurIcon from './RegionTiles/CostaSur.svg';
+import GuayaquilIcon from './RegionTiles/Guayaquil.svg';
+import SierraCentroIcon from './RegionTiles/SierraCentro.svg';
+import SierraOrienteIcon from './RegionTiles/SierraOriente.svg';
+import SierraSurIcon from './RegionTiles/SierraSur.svg';
+
 
 const StrategyCardContainer = () => {
     return (
@@ -34,9 +44,9 @@ const StrategyCardContainer = () => {
                             />
                         }
                         strategyName="Increase Coverage KitKat All SKUS"
-                        goalName="Increase Coverage"
+                        goalName={['Increase Coverage', 'Grow Revenue']}
                         productNames="KitKat 12pack"
-                        regionNames="Quito"
+                        regionNames={[  QuitoIcon, CostaCentroIcon, CostaNorteIcon, CostaSurIcon, GuayaquilIcon, SierraCentroIcon, SierraOrienteIcon, SierraSurIcon]}
                         leverNames={['BEES Force', 'BEES Grow', 'BEES Customer']}
                     />
                 </Carousel.Slide>
@@ -52,22 +62,13 @@ const StrategyCardContainer = () => {
                             />
                         }
                         strategyName="Increase Coverage KitKat All SKUS"
-                        goalName="Increase Coverage"
+                        goalName={['Increase Coverage']}
                         productNames="KitKat 12pack"
-                        regionNames="Quito"
+                        regionNames={[  CostaSurIcon, GuayaquilIcon, SierraOrienteIcon, SierraSurIcon]}
                         leverNames={['BEES Force', 'BEES Grow', 'BEES Customer']}
                     />
                 </Carousel.Slide>
-                <Carousel.Slide>
-                    <StrategyOverviewCard
-                        lineGraph=""
-                        strategyName="Increase Coverage KitKat All SKUS"
-                        goalName="Increase Coverage"
-                        productNames="KitKat 12pack"
-                        regionNames="Quito"
-                        leverNames={['BEES Force', 'BEES Grow', 'BEES Customer']}
-                    />
-                </Carousel.Slide>
+                
             </Carousel>
         </div>
     );

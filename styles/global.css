@@ -246,3 +246,15 @@ input:checked+.mantine-Swith-track, .mantine-Switch-track {
     border: none;
 }
 
+.one-brain-overlay {
+    line-height: 10px;
+    position: absolute;
+    bottom: 10px;
+    z-index: 10;
+    left: 20px;
+}
+
+.orby-video {
+    border-radius: 100px;
+    mix-blend-mode: multiply;
+}

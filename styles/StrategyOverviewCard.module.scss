@@ -2,14 +2,14 @@
 
     display: flex;
     flex-direction: column;
-    height: 512px;
+    //height: 700px;
     width: 100%;
 
     color: #515674;
 
     background: linear-gradient(112.87deg, #edf2f7 0%, #e7deee 100%), #d9d9d9;
     background: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 
@@ -24,6 +24,21 @@
         font-family: 'Manrope';
         font-size: 14px;
 
+
+        .columns {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+
+            .left {
+                width: 50%;
+            }
+
+            .right {
+
+            }
+        }
+
         .stratList {
             
         }
@@ -34,22 +49,33 @@
 
         .strategyName {
             font-size: 16px;
-            padding-bottom: 40px;
-            color: #000;
+            padding-bottom: 15px;
+            color: #212225;
             // font-weight: bold;
         }
 
-        .goalName {
+        .regionsContainer {
+            display: grid;
+            grid-gap: 6px;
+            grid-template-columns: repeat(3, 1fr);
 
+            img {
+                box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+            }
+
+        }
+
+
+
+        .goalName {
+            color: #212225;
         }
 
         .productNames {
 
         }
 
-        .regionNames {
-
-        }
+        
 
         .levers {
 
@@ -63,11 +89,19 @@
     }
 
     .strategyButton {
-        font-size: 12px;
         font-weight: medium;
         display: flex;
         grid-gap: 5px;
         justify-self: end;
+
+        font-size: 16px;
+        padding-bottom: 15px;
+        color: #000;
+        margin-top: 20px;
+
+        svg {
+            margin-top: 4px;
+        }
     }
 
 

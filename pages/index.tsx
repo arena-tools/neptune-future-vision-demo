@@ -4,12 +4,15 @@ import isMobile from 'ismobilejs';
 import Head from 'next/head';
 import PageHeader from '../components/PageHeader';
 import ChatBox from '../components/ChatBox';
+import { OneBrainOverlay } from '../components/oneBrainOverlay';
 
 import { useRouter } from 'next/router';
 import HelmMap from '../components/helmMap';
 import StrategyCardContainer from '../components/StrategyCardContainer';
 
 import { SiteModeEvents, MapEvents, SiteModes } from '../utils/events';
+
+
 
 // basic map styling
 const helmMapStyle = {
@@ -96,6 +99,7 @@ function Home({
                 <link rel="shortcut icon" href="images/favicon.png" />
             </Head>
             <PageHeader />
+            <OneBrainOverlay />
             <div className="flex h-screen w-full bg-[#eeecf6] overflow-hidden relative">
                 <div
                     className={classNames(`p-4 ml-20 grow`, className, {
@@ -106,6 +110,7 @@ function Home({
                     <HelmMap newZoomValue={zoom} />
                 </div>
             </div>
+
         </div>
     );
 }
