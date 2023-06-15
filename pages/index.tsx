@@ -11,10 +11,13 @@ import HelmMap from '../components/helmMap';
 import StrategyCardContainer from '../components/StrategyCardContainer';
 import { SiteModeEvents, MapEvents, SiteModes } from '../utils/events';
 import { ScatterplotLayer } from '@deck.gl/layers/typed';
+import { AnimatePresence, motion, useAnimationControls } from 'framer-motion';
 
 import arrQuitoPocs from '../data/jsonFile.json';
+import { AMABar } from '../components/AMABar';
+import RightPanel from '../components/RightPanel';
 
-// @TODO: implement RegionLayer for globe view66 
+// @TODO: implement RegionLayer for globe view66
 // export const buildRegionlayer = () =>
 //     new GeoJsonLayer({
 //         id: 'geojson-layer',
@@ -69,6 +72,11 @@ export const buildPOCLayer = (
     return layer;
 };
 
+
+
+
+
+
 // basic map styling
 const helmMapStyle = {
     mapStyle: 'mapbox://styles/mlgardner/clh9imalh01vm01p497p37a4p',
@@ -87,13 +95,33 @@ function Home({
 }) {
     const mobile = isMobile().phone;
 
+    // ### Animation
+    const AMABarControls = useAnimationControls();
+    const RightPanelControls = useAnimationControls();
+
+    const AMAAnimationPositions = {
+        show: {
+            bottom: 0,
+            transition: {
+                type: 'spring',
+                damping: 30,
+                stiffness: 500,
+                restDelta: 0.001,
+            },
+        },
+    };
+
+    const showDetailPage = async () => {
+        AMABarControls.start('show');
+    };
+
     // const [currentLayer, setCurrentLayer] = useState(layer);
 
     // - ----------------- POCS ------------------------------------------
     // load the poc data onto the map
     useEffect(() => {
         if (arrQuitoPocs === null) return;
-        console.log(arrQuitoPocs);
+        //console.log(arrQuitoPocs);
     }, [arrQuitoPocs]);
 
     // - ----------------- Switch ------------------------------------------
@@ -120,6 +148,7 @@ function Home({
     const onZoomEvent = evt => {
         setZoom(evt.detail);
         console.log(evt.detail);
+        showDetailPage();
     };
 
     useEffect(() => {
@@ -158,8 +187,22 @@ function Home({
         );
     });
     // ----------------------------------------------------------------------------------------------
+    const handleSelectedStore = ({storeObject}) => {
+        console.log(storeObject);
+    }
 
-    const layer = new ScatterplotLayer({
+    const [selectedPOC, setSelectedPoc] = useState(null);
+    // const [hoverStore, setHoverStore] = useState(null);
+
+    // const onStoreHover = useMemo(
+    //     () =>
+    //         _.debounce(({ object, x, y }) => {
+    //             setHoverStore({ object, x, y });
+    //         }, 50),
+    //     [setHoverStore],
+    // );
+
+    const layer = useMemo(()=> new ScatterplotLayer({
         id: 'scatterplot-layer',
         data: arrQuitoPocs,
         visible: true,
@@ -174,6 +217,11 @@ function Home({
         //     ];
         // },
         getFillColor: d => [242, 207, 231],
+        updateTriggers: {
+            getFillColor: [selectedPOC]
+        },
+        
+        //getFillColor: d => [242, 207, 231],
         getRadius: d => 1.5,
         getPolygonOffset: null,
         radiusScale: 3,
@@ -182,12 +230,16 @@ function Home({
         lineWidthMinPixels: 1,
         lineWidthMaxPixels: 1,
         lineWidthScale: 1.5,
+        autoHighlight: true,
+        highlightColor: [241,27,151],
+        getLineColor: [241, 27, 151],
         stroked: true,
         pickable: true,
         filled: true,
-        // onClick ,
-        // onHover,
-    });
+        onClick: ({object}) => setSelectedPoc(object),
+        // onHover: (info, evt) => console.log('Hover:', info, evt),
+    }), [arrQuitoPocs, handleSelectedStore])
+
 
     return (
         <div className="light">
@@ -205,6 +257,8 @@ function Home({
                 >
                     {/* {siteMode === SiteModes.Agent ?  : <ChatBox />} */}
                     <StrategyCardContainer />
+                    <RightPanel />
+                    <AMABar animate={AMABarControls} variants={AMAAnimationPositions} />
                     <HelmMap newZoomValue={zoom} layer={layer} />
                 </div>
             </div>

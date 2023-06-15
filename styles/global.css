@@ -237,12 +237,13 @@ main {
 }
 
 .mantine-Switch-thumb {
-    background-color: #F11B97;
-    border: none; 
+    background-color: #f11b97;
+    border: none;
 }
 
-input:checked+.mantine-Swith-track, .mantine-Switch-track {
-    background-color: #F2CFE7 !important;
+input:checked + .mantine-Swith-track,
+.mantine-Switch-track {
+    background-color: #f2cfe7 !important;
     border: none;
 }
 
@@ -260,4 +261,45 @@ input:checked+.mantine-Swith-track, .mantine-Switch-track {
 }
 .mantine-Carousel-viewport {
     height: 800px;
+}
+
+.ama-bar-container {
+    display: flex;
+    width: 75%;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    justify-items: center;
+    position: absolute;
+    bottom: -100px;
+    left: 0px;
+    z-index: 10;
+    /* border: 1px solid red; */
+}
+
+.ama-bar {
+
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    width: 485px;
+    height: 38px;
+
+    background: #ffffff;
+    /* Input/Well drop shadow */
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 55px;
+}
+
+.ama-bar-text {
+    /* Ask about this strategy */
+    font-family: 'Manrope';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    padding-left: 20px;
+
+    /* Navy solid/30 */
+    color: #b1b5c1;
 }
