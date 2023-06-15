@@ -5,7 +5,6 @@ import { debounce } from 'lodash';
 import { getBoundsForPoints } from '../utils/getBoundsForPoints';
 import MapWrapper from './mapWrapper';
 
-
 enum CountryOptions {
     Ecuador = 'EC',
     Phillipines = 'PH',
@@ -64,8 +63,6 @@ const HelmMap = ({
         ...defaultViewPort,
     });
 
-    // const { appData } = usePrototypeContext();
-
     useEffect(() => {
         setViewPort({
             ...countryDefaultViewports[country],
@@ -115,16 +112,16 @@ const HelmMap = ({
 
     const transitionInterpolator = new LinearInterpolator(['longitude']);
 
-    // finally start rotating the camera
-    // const rotateCamera = useCallback(() => {
-    //     setViewPort(viewPort => ({
-    //         ...viewPort,
-    //         longitude: viewPort.longitude + 120,
-    //         transitionDuration: 15000,
-    //         transitionInterpolator,
-    //         onTransitionEnd: rotateCamera,
-    //     }));
-    // }, []);
+//    finally start rotating the camera
+    const rotateCamera = useCallback(() => {
+        setViewPort(viewPort => ({
+            ...viewPort,
+            longitude: viewPort.longitude + 120,
+            transitionDuration: 15000,
+            transitionInterpolator,
+            onTransitionEnd: rotateCamera,
+        }));
+    }, []);
 
     return (
         <MapWrapper
