@@ -16,7 +16,7 @@ const StrategyOverviewCard = ({
         return <div className={styles.title}>{children}</div>;
     };
 
-    console.log(regionNames);
+    // console.log(regionNames);
 
     return (
         <div className={styles.strategyCard}>

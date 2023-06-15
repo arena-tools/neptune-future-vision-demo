@@ -56,7 +56,7 @@ interface MapWrapperProps {
     children?: React.ReactNode;
     loading?: boolean;
     onViewportChange?: ({ viewState }: { viewState: any }) => void;
-    getCursor?: (object) => 'grab' | 'pointer' | 'grabbing';
+    getCursor?: (any) => 'grab' | 'pointer' | 'grabbing' | null | undefined;
     onLoad?: () => void;
     legendTitle?: string;
     legendHeatColors?: string[];

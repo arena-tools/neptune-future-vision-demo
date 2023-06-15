@@ -3,8 +3,8 @@ import { FlyToInterpolator, LinearInterpolator } from '@deck.gl/core';
 import { ScatterplotLayer } from '@deck.gl/layers/typed';
 import { debounce } from 'lodash';
 import { getBoundsForPoints } from '../utils/getBoundsForPoints';
-
 import MapWrapper from './mapWrapper';
+
 
 enum CountryOptions {
     Ecuador = 'EC',
@@ -39,7 +39,7 @@ const defaultViewPort = {
 export const ZOOM_THRESHOLD = 5;
 
 interface HelmMapProps {
-    children?: JSX.Element;
+    children?: JSX.Element;//React.ReactElement[];
     layer?: ScatterplotLayer;
     setZoom?: (zoom: number) => void;
     layerPoints?: { latitude: number; longitude: number }[];
@@ -63,6 +63,8 @@ const HelmMap = ({
         ...countryDefaultViewports[country],
         ...defaultViewPort,
     });
+
+    // const { appData } = usePrototypeContext();
 
     useEffect(() => {
         setViewPort({
@@ -113,15 +115,16 @@ const HelmMap = ({
 
     const transitionInterpolator = new LinearInterpolator(['longitude']);
 
-    const rotateCamera = useCallback(() => {
-        setViewPort(viewPort => ({
-            ...viewPort,
-            longitude: viewPort.longitude + 120,
-            transitionDuration: 15000,
-            transitionInterpolator,
-            onTransitionEnd: rotateCamera,
-        }));
-    }, []);
+    // finally start rotating the camera
+    // const rotateCamera = useCallback(() => {
+    //     setViewPort(viewPort => ({
+    //         ...viewPort,
+    //         longitude: viewPort.longitude + 120,
+    //         transitionDuration: 15000,
+    //         transitionInterpolator,
+    //         onTransitionEnd: rotateCamera,
+    //     }));
+    // }, []);
 
     return (
         <MapWrapper
@@ -131,8 +134,8 @@ const HelmMap = ({
             layers={layer}
             viewPort={viewPort}
             onViewportChange={onViewStateChange}
-            getCursor={({ isHovering }) => (isHovering ? 'pointer' : null)}
-            onLoad={rotateCamera}
+            getCursor={({ isHovering }) => (isHovering ? 'pointer' : undefined)}
+            // onLoad={rotateCamera}
         >
             {children}
         </MapWrapper>

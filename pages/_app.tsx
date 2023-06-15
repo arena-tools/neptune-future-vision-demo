@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
 import { useEffect, useRef } from 'react';
 import isMobile from 'ismobilejs';
-import { PrototypeContextProvider } from '../utils/PrototypeContext';
+// import { PrototypeContextProvider } from '../utils/PrototypeContext';
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
@@ -49,9 +49,9 @@ export default function App({ Component, pageProps }: AppProps) {
                     content="width=device-width, initial-scale=0.85, maximum-scale=0.85"
                 />
             </Head>
-            <PrototypeContextProvider>
+            {/* <PrototypeContextProvider> */}
                 <Component {...pageProps} />
-            </PrototypeContextProvider>
+            {/* </PrototypeContextProvider> */}
         </MantineProvider>
     );
 }
