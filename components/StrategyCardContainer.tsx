@@ -26,6 +26,7 @@ const StrategyCardContainer = () => {
                 align="start"
                 slidesToScroll={1}
                 withControls={false}
+                style={{height: '720px'}}
             >
                 <Carousel.Slide
                     onClick={e => {

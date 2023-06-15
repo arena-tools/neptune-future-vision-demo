@@ -14,7 +14,7 @@ import { ScatterplotLayer } from '@deck.gl/layers/typed';
 
 import arrQuitoPocs from '../data/jsonFile.json';
 
-// @TODO: implement RegionLayer for globe view
+// @TODO: implement RegionLayer for globe view66 
 // export const buildRegionlayer = () =>
 //     new GeoJsonLayer({
 //         id: 'geojson-layer',
