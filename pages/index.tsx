@@ -241,6 +241,13 @@ function Home({
     }), [arrQuitoPocs, handleSelectedStore])
 
 
+
+    const ZOOM_THRESHOLD = 5;
+
+    const layerVisible = useMemo(() => zoom > ZOOM_THRESHOLD, [zoom]);
+    
+    
+
     return (
         <div className="light">
             <Head>

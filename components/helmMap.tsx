@@ -40,8 +40,6 @@ const defaultViewPort = {
     transitionInterpolator: new FlyToInterpolator(),
 };
 
-export const ZOOM_THRESHOLD = 5;
-
 interface HelmMapProps {
     children?: JSX.Element;//React.ReactElement[];
     layer?: ScatterplotLayer;
