@@ -7,6 +7,7 @@ import MapWrapper from './mapWrapper';
 
 enum CountryOptions {
     Ecuador = 'EC',
+    Quito = 'Quito', // yes.... its not a country
     Phillipines = 'PH',
 }
 
@@ -17,6 +18,10 @@ const helmMapStyle = {
 };
 
 const countryDefaultViewports: Record<CountryOptions, { latitude: number; longitude: number }> = {
+    [CountryOptions.Quito]: {
+        longitude: -78.4678,
+        latitude: -0.1807,
+    },
     [CountryOptions.Ecuador]: {
         longitude: -78.4902002289673,
         latitude: -1.0527800925377535,
@@ -57,7 +62,7 @@ const HelmMap = ({
     const mapWrapperRef = useRef<any>(null);
     const debouncedSetZoom = useMemo(() => setZoom && debounce(setZoom, 20), [setZoom]);
 
-    const country = CountryOptions.Ecuador;
+    const country = CountryOptions.Quito;
     const [viewPort, setViewPort] = useState({
         ...countryDefaultViewports[country],
         ...defaultViewPort,

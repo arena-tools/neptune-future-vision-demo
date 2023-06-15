@@ -173,10 +173,10 @@ function Home({
         //         number,
         //     ];
         // },
-        getFillColor: d => [255, 140, 0],
+        getFillColor: d => [242, 207, 231],
         getRadius: d => 1.5,
         getPolygonOffset: null,
-        radiusScale: 6,
+        radiusScale: 3,
         radiusUnits: 'pixels',
         lineWidthUnits: 'pixels',
         lineWidthMinPixels: 1,
@@ -203,7 +203,8 @@ function Home({
                         '!ml-0 max-w-[100vw] overflow-auto': mobile,
                     })}
                 >
-                    {siteMode === SiteModes.Agent ? <StrategyCardContainer /> : <ChatBox />}
+                    {/* {siteMode === SiteModes.Agent ?  : <ChatBox />} */}
+                    <StrategyCardContainer />
                     <HelmMap newZoomValue={zoom} layer={layer} />
                 </div>
             </div>
