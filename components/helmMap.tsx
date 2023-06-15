@@ -3,6 +3,8 @@ import { FlyToInterpolator, LinearInterpolator } from '@deck.gl/core';
 import { ScatterplotLayer } from '@deck.gl/layers/typed';
 import { debounce } from 'lodash';
 import { getBoundsForPoints } from '../utils/getBoundsForPoints';
+import { MapEvents, sendEvent} from '../utils/events';
+
 import MapWrapper from './mapWrapper';
 
 enum CountryOptions {
@@ -41,7 +43,7 @@ const defaultViewPort = {
 };
 
 interface HelmMapProps {
-    children?: JSX.Element;//React.ReactElement[];
+    children?: JSX.Element; //React.ReactElement[];
     layer?: ScatterplotLayer;
     setZoom?: (zoom: number) => void;
     layerPoints?: { latitude: number; longitude: number }[];
@@ -61,6 +63,9 @@ const HelmMap = ({
     const debouncedSetZoom = useMemo(() => setZoom && debounce(setZoom, 20), [setZoom]);
 
     const country = CountryOptions.Quito;
+
+    const transitionInterpolator = new LinearInterpolator(['longitude']);
+
     const [viewPort, setViewPort] = useState({
         ...countryDefaultViewports[country],
         ...defaultViewPort,
@@ -84,6 +89,17 @@ const HelmMap = ({
     }, [debouncedSetZoom, viewPort.zoom]);
 
     useEffect(() => {
+        if (newZoomValue) {
+            defaultViewPort.zoom = newZoomValue;
+            setViewPort(viewPort => ({
+                ...countryDefaultViewports[country],
+                ...defaultViewPort,
+                onTransitionEnd: () => sendEvent(MapEvents.onZoomInComplete, {}),
+            }));
+        }
+    }, [newZoomValue, onViewStateChange]);
+
+    useEffect(() => {
         if (selectedStoreLocation) {
             setViewPort({
                 ...defaultViewPort,
@@ -102,27 +118,14 @@ const HelmMap = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedStoreLocation, layerPoints, onViewStateChange]);
 
-    useEffect(() => {
-        if (newZoomValue) {
-            defaultViewPort.zoom = newZoomValue;
-
-            setViewPort({
-                ...countryDefaultViewports[country],
-                ...defaultViewPort,
-            });
-        }
-    }, [newZoomValue, onViewStateChange]);
-
-    const transitionInterpolator = new LinearInterpolator(['longitude']);
-
-//    finally start rotating the camera
+    //    finally start rotating the camera
     const rotateCamera = useCallback(() => {
         setViewPort(viewPort => ({
             ...viewPort,
             longitude: viewPort.longitude + 120,
             transitionDuration: 15000,
             transitionInterpolator,
-            onTransitionEnd: rotateCamera,
+            // onTransitionEnd: rotateCamera,
         }));
     }, []);
 
@@ -135,7 +138,7 @@ const HelmMap = ({
             viewPort={viewPort}
             onViewportChange={onViewStateChange}
             getCursor={({ isHovering }) => (isHovering ? 'pointer' : undefined)}
-            // onLoad={rotateCamera}
+            //onLoad={rotateCamera}
         >
             {children}
         </MapWrapper>

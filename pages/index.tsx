@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo, useState } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import isMobile from 'ismobilejs';
 import Head from 'next/head';
@@ -10,12 +10,15 @@ import { useRouter } from 'next/router';
 import HelmMap from '../components/helmMap';
 import StrategyCardContainer from '../components/StrategyCardContainer';
 import { SiteModeEvents, MapEvents, SiteModes } from '../utils/events';
-import { ScatterplotLayer } from '@deck.gl/layers/typed';
+import { ScatterplotLayer } from '@deck.gl/layers';
 import { AnimatePresence, motion, useAnimationControls } from 'framer-motion';
 
 import arrQuitoPocs from '../data/jsonFile.json';
 import { AMABar } from '../components/AMABar';
 import RightPanel from '../components/RightPanel';
+import { Legend, LegendOption } from '../components/legend';
+import { cardLinearGradient, helmColors } from '../utils/colors';
+
 
 // @TODO: implement RegionLayer for globe view66
 // export const buildRegionlayer = () =>
@@ -72,11 +75,6 @@ export const buildPOCLayer = (
     return layer;
 };
 
-
-
-
-
-
 // basic map styling
 const helmMapStyle = {
     mapStyle: 'mapbox://styles/mlgardner/clh9imalh01vm01p497p37a4p',
@@ -95,6 +93,8 @@ function Home({
 }) {
     const mobile = isMobile().phone;
 
+    const [arrPOCS, setArrPOCS] = useState<object[]>([]);
+
     // ### Animation
     const AMABarControls = useAnimationControls();
     const RightPanelControls = useAnimationControls();
@@ -111,10 +111,7 @@ function Home({
         },
     };
 
-    const showDetailPage = async () => {
-        AMABarControls.start('show');
-    };
-
+    
     // const [currentLayer, setCurrentLayer] = useState(layer);
 
     // - ----------------- POCS ------------------------------------------
@@ -145,16 +142,35 @@ function Home({
     // default zooom is 2.5 (globe)
     const [zoom, setZoom] = useState(2.5);
 
-    const onZoomEvent = evt => {
+    // this gets fired when you click on a strategy card
+    const onZoomInEvent = evt => {
         setZoom(evt.detail);
-        console.log(evt.detail);
+    };
+
+    useEffect(() => {
+        document.addEventListener(MapEvents.onZoomRequested, evt => onZoomInEvent(evt));
+        return document.removeEventListener(MapEvents.onZoomRequested, evt => onZoomInEvent(evt));
+    }, [zoom]);
+
+    // once you have zoomed in all the way - another event fires to let you know the zoom is complete
+    // then this function sequences in all the UI
+    const showDetailPage = async () => {
+        AMABarControls.start('show');
+    };
+
+    const onZoomInComplete = evt => {
+        console.log('zoome in completed');
+        // when we have zoomed in onto Quito, let's animate things into the map.
         showDetailPage();
     };
 
     useEffect(() => {
-        document.addEventListener(MapEvents.onZoomRequested, evt => onZoomEvent(evt));
-        return document.removeEventListener(MapEvents.onZoomRequested, evt => onZoomEvent(evt));
-    }, [zoom]);
+        document.addEventListener(MapEvents.onZoomInComplete, evt => onZoomInComplete(evt));
+        return document.removeEventListener(MapEvents.onZoomInComplete, evt => onZoomInComplete(evt));
+    }, []);
+
+
+
 
     // - ----------------- Viewport Changes ------------------------------------------
     // default viewport is EC, all viewport definitions are in helmMap.tsx
@@ -187,66 +203,129 @@ function Home({
         );
     });
     // ----------------------------------------------------------------------------------------------
-    const handleSelectedStore = ({storeObject}) => {
+    const handleSelectedStore = ({ storeObject }) => {
         console.log(storeObject);
-    }
+    };
 
-    const [selectedPOC, setSelectedPoc] = useState(null);
-    // const [hoverStore, setHoverStore] = useState(null);
+    const [selectedPOC, setSelectedPoc] = useState<any>(null);
 
-    // const onStoreHover = useMemo(
-    //     () =>
-    //         _.debounce(({ object, x, y }) => {
-    //             setHoverStore({ object, x, y });
-    //         }, 50),
-    //     [setHoverStore],
-    // );
+    useEffect(() => {
+        // console.log(selectedPOC);
+    }, [selectedPOC]);
 
-    const layer = useMemo(()=> new ScatterplotLayer({
-        id: 'scatterplot-layer',
-        data: arrQuitoPocs,
-        visible: true,
-        getPosition: d => [d.longitude, d.latitude],
-        // getFillColor(d: StrategyOverviewMapped) {
-        //     const color = colorFn(d);
-        //     const hovered = hoveredStore && hoveredStore.accountid === d.accountid;
-        //     return (hovered ? Color(color).darken(0.2).rgb().array() : color) as [
-        //         number,
-        //         number,
-        //         number,
-        //     ];
-        // },
-        getFillColor: d => [242, 207, 231],
-        updateTriggers: {
-            getFillColor: [selectedPOC]
-        },
-        
-        //getFillColor: d => [242, 207, 231],
-        getRadius: d => 1.5,
-        getPolygonOffset: null,
-        radiusScale: 3,
-        radiusUnits: 'pixels',
-        lineWidthUnits: 'pixels',
-        lineWidthMinPixels: 1,
-        lineWidthMaxPixels: 1,
-        lineWidthScale: 1.5,
-        autoHighlight: true,
-        highlightColor: [241,27,151],
-        getLineColor: [241, 27, 151],
-        stroked: true,
-        pickable: true,
-        filled: true,
-        onClick: ({object}) => setSelectedPoc(object),
-        // onHover: (info, evt) => console.log('Hover:', info, evt),
-    }), [arrQuitoPocs, handleSelectedStore])
+    const layer = useMemo(
+        () =>
+            new ScatterplotLayer({
+                id: 'scatterplot-layer',
+                data: arrPOCS,
+                visible: true,
+                getPosition: d => [d.longitude, d.latitude],
+                //getFillColor: d => [242, 207, 231],
+                getFillColor(d: any) {
+                    const pocType = d.pocType;
+                    const pocLevers = d.pocLevers;
+                    let pocColor;
+                    switch (pocType) {
+                        case 0:
+                            pocColor = [134, 134, 134];
+                            break;
+                        case 1:
+                            pocColor = [0, 207, 120];
+                            break;
+                        case 2:
+                            pocColor = [235, 0, 56];
+                            break;
+                        case 3:
+                        case 4:
+                            pocColor = [188, 188, 188];
+                            break;
+                    }
 
+                    if (selectedPOC?.id === d.id) {
+                        return [241, 27, 151];
+                    }
 
+                    return pocColor;
+                },
+                updateTriggers: {
+                    getFillColor: [selectedPOC],
+                },
+                getRadius: d => 1.5,
+                getPolygonOffset: null,
+                radiusScale: 4,
+                radiusUnits: 'pixels',
+                lineWidthUnits: 'pixels',
+                lineWidthMinPixels: 1,
+                lineWidthMaxPixels: 1,
+                lineWidthScale: 1.5,
+                autoHighlight: true,
+                highlightColor: [241, 27, 151],
+                getLineColor: [241, 27, 151],
+                stroked: false,
+                pickable: true,
+                filled: true,
+                onClick: ({ object }) => setSelectedPoc(object),
+                // onHover: (info, evt) => console.log('Hover:', info, evt),
+            }),
+        [arrQuitoPocs, handleSelectedStore],
+    );
 
     const ZOOM_THRESHOLD = 5;
 
     const layerVisible = useMemo(() => zoom > ZOOM_THRESHOLD, [zoom]);
-    
-    
+
+    //setup the pocs
+    useEffect(() => {
+        setArrPOCS(arrQuitoPocs);
+    }, [arrQuitoPocs]);
+
+    const defaultPocFilters: PocFilters = {
+        included: true,
+        excluded: true,
+    };
+
+    type PocFilters = Record<'included' | 'excluded', boolean>;
+
+    const [pocFilters, setPocFilters] = useState<PocFilters>(defaultPocFilters);
+
+    const togglePocFilter = useCallback(
+        (filter: 'included' | 'excluded') => {
+            setPocFilters(prev => ({ ...prev, [filter]: !prev[filter] }));
+        },
+        [setPocFilters],
+    );
+
+    const legendOptions = useMemo(
+        () =>
+            [
+                { value: 'included', label: 'prioritized' },
+                { value: 'excluded', label: 'deprioritized' },
+            ] as [LegendOption, LegendOption],
+        [],
+    );
+
+    interface HelmCardProps {
+        children: React.ReactNode;
+        className?: string;
+        style?: any;
+        onClick?: () => void;
+    }
+
+    const HelmCard = ({ children, className, style, ...rest }: HelmCardProps) => (
+        <div
+            {...rest}
+            className={`rounded-md p-4 ${className}`}
+            style={{
+                borderWidth: '0.5px 0px 0px 0.5px',
+                borderStyle: 'solid',
+                borderColor: 'rgba(0, 0, 0, 0.1)',
+                boxShadow: '8px 8px 16px rgba(10, 12, 15, 0.05)',
+                ...style,
+            }}
+        >
+            {children}
+        </div>
+    );
 
     return (
         <div className="light">
@@ -264,9 +343,27 @@ function Home({
                 >
                     {/* {siteMode === SiteModes.Agent ?  : <ChatBox />} */}
                     <StrategyCardContainer />
-                    <RightPanel />
+                    {/* <RightPanel /> */}
                     <AMABar animate={AMABarControls} variants={AMAAnimationPositions} />
-                    <HelmMap newZoomValue={zoom} layer={layer} />
+                    {/* <Legend /> */}
+                    <HelmMap newZoomValue={zoom} layer={layer}>
+                        <HelmCard
+                            className="map-legend-filter absolute bg-gray-100 min-w-[120px]"
+                            style={{ background: cardLinearGradient }}
+                        >
+                            <div style={{ color: helmColors.gray2 }}>
+                                <div className="text-lg mb-2" style={{ color: helmColors.gray2 }}>
+                                    Stuff
+                                </div>
+                                <Legend
+                                    pocFilters={pocFilters}
+                                    togglePocFilter={togglePocFilter}
+                                    options={legendOptions}
+                                />
+                            </div>
+                        </HelmCard>
+                    </HelmMap>
+                    {/* <HelmMap newZoomValue={zoom} layer={layer} /> */}
                 </div>
             </div>
         </div>

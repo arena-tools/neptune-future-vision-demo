@@ -13,6 +13,7 @@ enum MapEvents {
     onZoomRequested = 'evtZoomEvent',
     onViewPortChanged = 'evtViewPortChanged',
     onLayerChanged = 'evtLayerChanged',
+    onZoomInComplete = 'evtOnZoomInComplete',
 }
 
 function sendEvent(eventName, dataObj) {

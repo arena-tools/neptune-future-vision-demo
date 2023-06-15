@@ -303,3 +303,10 @@ input:checked + .mantine-Swith-track,
     /* Navy solid/30 */
     color: #b1b5c1;
 }
+
+
+.map-legend-filter {
+    position: absolute;
+    left: 20px;
+    bottom: 60px;
+}
