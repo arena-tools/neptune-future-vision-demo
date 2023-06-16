@@ -73,7 +73,7 @@ const StrategyCardContainer = () => {
                             />
                         }
                         strategyName="Increase Coverage KitKat All SKUS"
-                        goalName={['Increase Coverage', 'Grow Revenue']}
+                        goalName={['Increase Coverage', 'Increase Digital Adoption']}
                         productNames="KitKat 12pack"
                         regionNames={[
                             QuitoIcon,

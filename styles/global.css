@@ -283,7 +283,7 @@ input:checked + .mantine-Swith-track,
     align-items: center;
     justify-self: center;
     width: 485px;
-    height: 38px;
+    height: 55px;
 
     background: #ffffff;
     /* Input/Well drop shadow */
@@ -307,6 +307,19 @@ input:checked + .mantine-Swith-track,
 
 .map-legend-filter {
     position: absolute;
-    left: 20px;
+    left: -250px;
     bottom: 60px;
+}
+
+.legend-head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.legend-head-left {
+
+}
+
+.legend-head-right {
+
 }

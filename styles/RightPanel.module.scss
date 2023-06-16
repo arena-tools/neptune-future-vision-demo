@@ -1,17 +1,28 @@
 .rightPanel {
-    height: calc(100% - 90px);
+    // height: calc(100% - 90px);
+    height: 100%;
     position: absolute;
+    height: 100%;
+
     width: 500px;
     right: 0px;
-    top: 90px;
-    z-index: 9;
+    // top: 90px;
+    top: 0px;
+    z-index: 10;
 
     background: linear-gradient(112.87deg, #edf2f7 0%, #e7deee 100%), #d9d9d9;
-    background: rgba(255, 255, 255, 0.2);
+    
+    background: rgba(249, 249, 251, 0.9);
+    // background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-left: 1px solid #ddd;
+
+    .rightImage {
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
 
 }
