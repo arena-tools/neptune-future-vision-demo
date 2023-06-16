@@ -5,7 +5,7 @@
     height: 100%;
 
     width: 500px;
-    right: 0px;
+    right: -500px;
     // top: 90px;
     top: 0px;
     z-index: 10;
@@ -20,8 +20,9 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-left: 1px solid #ddd;
 
+
     .rightImage {
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     }
 
 

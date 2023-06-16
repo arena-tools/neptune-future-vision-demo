@@ -19,60 +19,7 @@ import RightPanel from '../components/RightPanel';
 import { ProductFitLegend, Legend, LegendOption } from '../components/legend';
 import { cardLinearGradient, helmColors } from '../utils/colors';
 
-// @TODO: implement RegionLayer for globe view66
-// export const buildRegionlayer = () =>
-//     new GeoJsonLayer({
-//         id: 'geojson-layer',
-//         data: ecuadorProvinces,
-//         pickable: false,
-//         stroked: true,
-//         lineWidthScale: 20,
-//         lineWidthMinPixels: 2,
-//         getLineColor: [255, 255, 255, 100],
-//         getFillColor: [0, 0, 0, 0],
-//         getRadius: 100,
-//         getLineWidth: 1,
-//     });
-
-export const buildPOCLayer = (
-    id,
-    data: any[],
-    onClick,
-    onHover,
-    hoveredStore,
-    // colorFn: (d: StrategyOverviewMapped) => [number, number, number],
-    visible = true,
-) => {
-    const layer = new ScatterplotLayer({
-        id,
-        data,
-        visible,
-        getPosition: d => [d.longitude, d.latitude],
-        // getFillColor(d: StrategyOverviewMapped) {
-        //     const color = colorFn(d);
-        //     const hovered = hoveredStore && hoveredStore.accountid === d.accountid;
-        //     return (hovered ? Color(color).darken(0.2).rgb().array() : color) as [
-        //         number,
-        //         number,
-        //         number,
-        //     ];
-        // },
-        getFillColor: d => [255, 140, 0],
-        getRadius: d => 3.5,
-        radiusScale: 1,
-        radiusUnits: 'pixels',
-        lineWidthUnits: 'pixels',
-        lineWidthMinPixels: 1,
-        lineWidthMaxPixels: 1,
-        lineWidthScale: 1.5,
-        stroked: true,
-        pickable: true,
-        filled: true,
-        onClick,
-        onHover,
-    });
-    return layer;
-};
+import { useKeyDown } from '../utils/useKeyDown';
 
 // basic map styling
 const helmMapStyle = {
@@ -99,8 +46,6 @@ function Home({
 
     // the current selected poc
     const [selectedPOC, setSelectedPoc] = useState<any>(null);
-
-
 
     // when you click on a doc
     const handleSelectedStore = ({ storeObject }) => {
@@ -140,8 +85,8 @@ function Home({
 
                     if (selectedPOC?.id === d.id) {
                         return [241, 27, 151];
-                    } else {
-                        return [125,125,125];
+                    } else if (selectedPOC !== null) {
+                        return [125, 125, 125];
                     }
 
                     return pocColor;
@@ -176,6 +121,27 @@ function Home({
     // ### Animation
     const LegendControls = useAnimationControls();
     const RightPanelControls = useAnimationControls();
+
+    const RightPanelVariants  = {
+        show: {
+            right: 0,
+            transition: {
+                type: 'spring',
+                damping: 30,
+                stiffness: 500,
+                restDelta: 0.001,
+            },
+        },
+        hide: {
+            left: -500,
+            transition: {
+                type: 'spring',
+                damping: 30,
+                stiffness: 500,
+                restDelta: 0.001,
+            },
+        },
+    }
 
     const LegendPositions = {
         show: {
@@ -233,7 +199,9 @@ function Home({
         await LegendControls.start('show');
     };
 
-    const showRightPanel = async () => {};
+    const showRightPanel = async () => {
+        await RightPanelControls.start('show');
+    };
 
     const onZoomInComplete = evt => {
         console.log('zoome in completed');
@@ -282,12 +250,26 @@ function Home({
     // ----------------------------------------------------------------------------------------------
 
     const filterAllButSelected = () => {
-        setArrPOCS(arrQuitoPocs.filter(poc => poc.id === selectedPOC.id));
+        // setArrPOCS(arrQuitoPocs.filter(poc => poc.id === selectedPOC.id));
     };
 
     const unfilterAllPocs = () => {
         setArrPOCS(arrQuitoPocs);
+    };
+
+    const filterExistingBuyers = () => {
+
     }
+
+    const filterGoodFits = ()=> {
+
+    }
+
+    const filterGoodFitDigitalAdoption = ()=> {
+
+    }
+
+
 
     useEffect(() => {
         console.log(selectedPOC);
@@ -295,8 +277,38 @@ function Home({
         //SEND EVENT TO
         if (selectedPOC !== null) {
             filterAllButSelected();
+            showRightPanel();
         }
     }, [selectedPOC]);
+
+    // fake filtering for video recording
+    // 
+    useKeyDown(() => {
+        console.log('0 pressed');
+        unfilterAllPocs();
+    }, ["0"]);
+
+    useKeyDown(() => {
+        console.log('Filtering Good Fits');
+        filterGoodFits();
+    }, ["1"]);
+
+
+    useKeyDown(() => {
+        console.log('0 pressed');
+        filterGoodFitDigitalAdoption();
+    }, ["2"]);
+
+
+    useKeyDown(() => {
+        console.log('0 pressed');
+    }, ["3"]);
+
+
+
+
+
+
 
     const layerVisible = useMemo(() => zoom > ZOOM_THRESHOLD, [zoom]);
 
@@ -323,6 +335,7 @@ function Home({
         },
         [setPocFilters],
     );
+
 
     const legendOptions = useMemo(
         () =>
@@ -374,7 +387,7 @@ function Home({
                 >
                     {/* {siteMode === SiteModes.Agent ?  : <ChatBox />} */}
                     <StrategyCardContainer />
-                    <RightPanel />
+                    <RightPanel animate={RightPanelControls} variants={RightPanelVariants} />
                     {/* <AMABar animate={AMABarControls} variants={AMAAnimationPositions} /> */}
                     {/* <Legend /> */}
                     <HelmMap newZoomValue={zoom} layer={demoLayer}>
