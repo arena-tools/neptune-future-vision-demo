@@ -10,10 +10,12 @@ import { useRouter } from 'next/router';
 import HelmMap from '../components/helmMap';
 import StrategyCardContainer from '../components/StrategyCardContainer';
 import { SiteModeEvents, MapEvents, SiteModes } from '../utils/events';
-import { ScatterplotLayer } from '@deck.gl/layers';
+import { TextLayer, ScatterplotLayer, GeoJsonLayer } from '@deck.gl/layers';
 import { AnimatePresence, motion, useAnimationControls } from 'framer-motion';
 
-import arrQuitoPocs from '../data/jsonFile.json';
+import ecuadorOutline from '../data/Ecuador.json';
+
+import arrQuitoPocs from '../data/KitKatPocs.json';
 import { AMABar } from '../components/AMABar';
 import RightPanel from '../components/RightPanel';
 import { ProductFitLegend, Legend, LegendOption } from '../components/legend';
@@ -54,40 +56,96 @@ function Home({
 
     const ZOOM_THRESHOLD = 5;
 
-    // main set of markers
+    const layer = new TextLayer({
+        id: 'text-layer',
+        data: arrPOCS,
+        pickable: true,
+        getPosition: d => [d.longitude, d.latitude],
+        getText: d => d.customer_name,
+        getSize: 10,
+        getAngle: 0,
+        getTextAnchor: 'middle',
+        getAlignmentBaseline: 'center',
+    });
+
+    const [hoverInfo, setHoverInfo] = useState({});
+
+    // geojson
+    const ecuadorLayer = useMemo(
+        () =>
+            new GeoJsonLayer({
+                id: 'geolayer',
+                data: ecuadorOutline,
+                pickable: true,
+                stroked: true,
+                filled: true,
+                extruded: false,
+                lineWidthMinPixels: 1,
+                getLineColor: [150, 150, 150, 255],
+                lineJointRounded: true,
+                getFillColor: d => {
+                    if (hoverInfo?.index === d.properties.order) {
+                        return [...d.properties.fill, 255];
+                    }
+                    return [...d.properties.fill, 130];
+                },
+                onHover: info => {
+                    setHoverInfo({
+                        index: info.index,
+                        x: info.x,
+                        y: info.y,
+                    });
+                },
+                updateTriggers: {
+                    getFillColor: hoverInfo?.index,
+                },
+            }),
+        [ecuadorOutline],
+    );
+
+    // main set of markers once the map is zoomed in
     const demoLayer = useMemo(
         () =>
             new ScatterplotLayer({
                 id: 'scatterplot-layer',
                 data: arrPOCS,
                 visible: true,
+                // getTooltip: ({object}) => object && object.customer_name,
                 getPosition: d => [d.longitude, d.latitude],
                 //getFillColor: d => [242, 207, 231],
+                // Update app state
+                onHover: info => setHoverInfo(info),
                 getFillColor(d: any) {
-                    const pocType = d.pocType;
+                    const pocType = d.buys_kit_kat;
                     const pocLevers = d.pocLevers;
                     let pocColor;
-                    switch (pocType) {
-                        case 0:
-                            pocColor = [134, 134, 134];
-                            break;
-                        case 1:
-                            pocColor = [0, 207, 120];
-                            break;
-                        case 2:
-                            pocColor = [235, 0, 56];
-                            break;
-                        case 3:
-                        case 4:
-                            pocColor = [188, 188, 188];
-                            break;
+                    // switch (pocType) {
+                    //     case 0:
+                    //         pocColor = [134, 134, 134];
+                    //         break;
+                    //     case 1:
+                    //         pocColor = [0, 207, 120];
+                    //         break;
+                    //     case 2:
+                    //         pocColor = [235, 0, 56];
+                    //         break;
+                    //     case 3:
+                    //     case 4:
+                    //         pocColor = [188, 188, 188];
+                    //         break;
+                    // }
+
+                    if (pocType === true) {
+                        pocColor = [235, 0, 56];
+                    } else {
+                        pocColor = [0, 207, 120];
                     }
 
-                    if (selectedPOC?.id === d.id) {
-                        return [241, 27, 151];
-                    } else if (selectedPOC !== null) {
-                        return [125, 125, 125];
-                    }
+                    // if (selectedPOC?.id === d.id) {
+                    //     return [241, 27, 151];
+                    // } else if (selectedPOC !== null) {
+                    //     return [125, 125, 125];
+                    // }
 
                     return pocColor;
                 },
@@ -122,7 +180,7 @@ function Home({
     const LegendControls = useAnimationControls();
     const RightPanelControls = useAnimationControls();
 
-    const RightPanelVariants  = {
+    const RightPanelVariants = {
         show: {
             right: 0,
             transition: {
@@ -141,7 +199,7 @@ function Home({
                 restDelta: 0.001,
             },
         },
-    }
+    };
 
     const LegendPositions = {
         show: {
@@ -257,19 +315,15 @@ function Home({
         setArrPOCS(arrQuitoPocs);
     };
 
-    const filterExistingBuyers = () => {
+    // pocType 1
+    const filterGoodFits = () => {
+        setArrPOCS(arrQuitoPocs.filter(poc => poc.pocType === 1));
+    };
 
-    }
-
-    const filterGoodFits = ()=> {
-
-    }
-
-    const filterGoodFitDigitalAdoption = ()=> {
-
-    }
-
-
+    // pocType 1 & levers = sometihng...
+    const filterGoodFitDigitalAdoption = () => {
+        setArrPOCS(arrQuitoPocs.filter(poc => poc.pocType === 1 && poc.levers % 3 === 0));
+    };
 
     useEffect(() => {
         console.log(selectedPOC);
@@ -282,33 +336,25 @@ function Home({
     }, [selectedPOC]);
 
     // fake filtering for video recording
-    // 
+    //
     useKeyDown(() => {
         console.log('0 pressed');
         unfilterAllPocs();
-    }, ["0"]);
+    }, ['0']);
 
     useKeyDown(() => {
         console.log('Filtering Good Fits');
         filterGoodFits();
-    }, ["1"]);
-
+    }, ['1']);
 
     useKeyDown(() => {
-        console.log('0 pressed');
+        console.log('Filtering Good Fits That are some tactic');
         filterGoodFitDigitalAdoption();
-    }, ["2"]);
-
+    }, ['2']);
 
     useKeyDown(() => {
         console.log('0 pressed');
-    }, ["3"]);
-
-
-
-
-
-
+    }, ['3']);
 
     const layerVisible = useMemo(() => zoom > ZOOM_THRESHOLD, [zoom]);
 
@@ -335,7 +381,6 @@ function Home({
         },
         [setPocFilters],
     );
-
 
     const legendOptions = useMemo(
         () =>
@@ -390,7 +435,22 @@ function Home({
                     <RightPanel animate={RightPanelControls} variants={RightPanelVariants} />
                     {/* <AMABar animate={AMABarControls} variants={AMAAnimationPositions} /> */}
                     {/* <Legend /> */}
-                    <HelmMap newZoomValue={zoom} layer={demoLayer}>
+                    <HelmMap newZoomValue={zoom} layer={ecuadorLayer}>
+                        {hoverInfo?.object && (
+                            <div
+                                style={{
+                                    color: '#000',
+                                    fontSize: '15px',
+                                    position: 'absolute',
+                                    zIndex: 15,
+                                    pointerEvents: 'none',
+                                    left: hoverInfo?.x + 15,
+                                    top: hoverInfo?.y,
+                                }}
+                            >
+                                {hoverInfo?.object.customer_name}
+                            </div>
+                        )}
                         <motion.div
                             className="map-legend-filter"
                             animate={LegendControls}

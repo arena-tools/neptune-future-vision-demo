@@ -122,7 +122,7 @@ const HelmMap = ({
     const rotateCamera = useCallback(() => {
         setViewPort(viewPort => ({
             ...viewPort,
-            longitude: viewPort.longitude + 120,
+            longitude: viewPort.longitude + 60,
             transitionDuration: 15000,
             transitionInterpolator,
             // onTransitionEnd: rotateCamera,
@@ -138,7 +138,7 @@ const HelmMap = ({
             viewPort={viewPort}
             onViewportChange={onViewStateChange}
             getCursor={({ isHovering }) => (isHovering ? 'pointer' : undefined)}
-            //onLoad={rotateCamera}
+            onLoad={rotateCamera}
         >
             {children}
         </MapWrapper>

@@ -69,7 +69,7 @@
     "react-highlight-words": "^0.20.0",
     "react-hotjar": "^5.5.0",
     "react-i18next": "^12.2.0",
-    "react-map-gl": "^7.0.24",
+    "react-map-gl": "^7.0.25",
     "react-plotly.js": "^2.6.0",
     "react-scrollama": "^2.3.2",
     "styled-components": "^5.3.10",

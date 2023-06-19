@@ -6,6 +6,7 @@ import { Loader } from '@mantine/core';
 import { forwardRef, useDeferredValue } from 'react';
 import { MapWrapperProps } from '../types/components/mapWrapper';
 
+
 const LOADER_POSITIONS = { left: 1 / 4, center: 1 / 2, right: 3 / 4 };
 const MAPBOX_ACCESS_TOKEN =
     'pk.eyJ1Ijoib3pndXJkb2dhbnRlY2giLCJhIjoiY2wydGkwczA3MDRrbTNjbzQyZ2VubXF5ciJ9.6_Lg_wWZDXbka5CKTMcKVA';
