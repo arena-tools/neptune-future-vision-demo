@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState } from 'react';
+import React, { useRef, useCallback, useState, useMemo } from 'react';
 import Map, {
     MapRef,
     MapLayerMouseEvent,
@@ -10,11 +10,13 @@ import Map, {
 } from 'react-map-gl';
 
 import { EaseToOptions } from 'mapbox-gl';
-import { FeatureCollection, Geometry, GeoJsonProperties } from "geojson";
-
+import { FeatureCollection, Geometry, GeoJsonProperties } from 'geojson';
 
 import bbox from '@turf/bbox';
+
+// load json
 import ecuadorOutline from '../data/Ecuador.json';
+import kitKatPocs from '../data/pocsGeoJson.json';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -29,7 +31,22 @@ const SimpleGlobe = ({ mapStyle, mapboxToken, viewState }) => {
     //this is a ref to the core mapbox gl interface
     const mapRef = useRef<MapRef>(null);
 
-    const ecuadorGeoJson : FeatureCollection<Geometry, GeoJsonProperties> = ecuadorOutline as FeatureCollection; 
+    // filter for poc layer - uses mapbox expressions
+    // https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/
+    //
+    //                           and
+    //
+    // https://docs.mapbox.com/help/tutorials/mapbox-gl-js-expressions/
+    // filter: ['!', ['pocType', 'levers', 'sellsKitKat']],
+
+    const [sellsKitKatValue, setSellsKitKatValue] = useState(0);
+    const pocFilter = useMemo(() => ['>=', 'sellsKitKat', sellsKitKatValue], [sellsKitKatValue]);
+
+    // GeoJson objects
+    const ecuadorGeoJson: FeatureCollection<Geometry, GeoJsonProperties> =
+        ecuadorOutline as FeatureCollection;
+    const kitKatPocsGeoJson: FeatureCollection<Geometry, GeoJsonProperties> =
+        kitKatPocs as FeatureCollection;
 
     // easing the rotation of the globe to ecuador
     const easingFunctions = {
@@ -96,6 +113,18 @@ const SimpleGlobe = ({ mapStyle, mapboxToken, viewState }) => {
         },
     };
 
+    const pocLayer: LayerProps = {
+        id: 'ecPocs',
+        type: 'circle',
+        paint: {
+            'circle-color': '#868686',
+            'circle-radius': 4,
+            'circle-stroke-width': 1,
+            'circle-stroke-color': '#868686',
+            'circle-opacity': 0.3,
+        },
+    };
+
     const [ecFillLayer, setEcFillLayer] = useState(fillLayer);
 
     // takes a 'feature' from geojson and zooms into its bounds
@@ -142,6 +171,7 @@ const SimpleGlobe = ({ mapStyle, mapboxToken, viewState }) => {
                 },
             };
 
+            //update the layer to reflect the new fill-opacity value of 0
             setEcFillLayer(fillLayer);
         }
     };
@@ -214,6 +244,18 @@ const SimpleGlobe = ({ mapStyle, mapboxToken, viewState }) => {
         rotateToEcuador();
     }, ['6']);
 
+    useKeyDown(() => {
+        setSellsKitKatValue(4);
+    }, ['7']);
+
+    useKeyDown(() => {
+        setSellsKitKatValue(1);
+    }, ['8']);
+
+    useKeyDown(() => {
+        setSellsKitKatValue(0);
+    }, ['9']);
+
     return (
         <div className="simple-map-container">
             <Map
@@ -242,6 +284,15 @@ const SimpleGlobe = ({ mapStyle, mapboxToken, viewState }) => {
                 <Source type="geojson" data={ecuadorGeoJson}>
                     <Layer {...ecFillLayer} />
                     <Layer {...outlineLayer} />
+                </Source>
+                <Source
+                    type="geojson"
+                    data={kitKatPocsGeoJson}
+                    // cluster={true}
+                    // clusterMaxZoom={14}
+                    // clusterRadius={50}
+                >
+                    <Layer {...pocLayer} filter={pocFilter} />
                 </Source>
             </Map>
         </div>
