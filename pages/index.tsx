@@ -20,7 +20,7 @@ import { AMABar } from '../components/AMABar';
 import RightPanel from '../components/RightPanel';
 import { ProductFitLegend, Legend, LegendOption } from '../components/legend';
 import { cardLinearGradient, helmColors } from '../utils/colors';
-
+import SimpleGlobe from '../components/SimpleGlobe';
 import { useKeyDown } from '../utils/useKeyDown';
 
 // basic map styling
@@ -326,7 +326,7 @@ function Home({
     };
 
     useEffect(() => {
-        console.log(selectedPOC);
+        // console.log(selectedPOC);
 
         //SEND EVENT TO
         if (selectedPOC !== null) {
@@ -416,6 +416,18 @@ function Home({
         </div>
     );
 
+
+    // pakistan baby
+    const initialMapViewState = {
+        bearing: 0,
+        pitch: 0,
+        longitude: 73.0479,
+        latitude: -0.1807,
+        zoom: 2.4,
+    };
+
+    
+    
     return (
         <div className="light">
             <Head>
@@ -431,11 +443,15 @@ function Home({
                     })}
                 >
                     {/* {siteMode === SiteModes.Agent ?  : <ChatBox />} */}
-                    <StrategyCardContainer />
+                    {/* <StrategyCardContainer /> */}
                     <RightPanel animate={RightPanelControls} variants={RightPanelVariants} />
-                    {/* <AMABar animate={AMABarControls} variants={AMAAnimationPositions} /> */}
-                    {/* <Legend /> */}
-                    <HelmMap newZoomValue={zoom} layer={ecuadorLayer}>
+                    <SimpleGlobe
+                        mapStyle={helmMapStyle.mapStyle}
+                        mapboxToken={helmMapStyle.mapboxAccessToken}
+                        viewState={initialMapViewState}
+                    />
+
+                    {/* <HelmMap newZoomValue={zoom} layer={ecuadorLayer}>
                         {hoverInfo?.object && (
                             <div
                                 style={{
@@ -495,8 +511,7 @@ function Home({
                                 </div>
                             </HelmCard>
                         </motion.div>
-                    </HelmMap>
-                    {/* <HelmMap newZoomValue={zoom} layer={layer} /> */}
+                    </HelmMap>  */}
                 </div>
             </div>
         </div>
