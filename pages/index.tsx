@@ -3,19 +3,12 @@ import classNames from 'classnames';
 import isMobile from 'ismobilejs';
 import Head from 'next/head';
 import PageHeader from '../components/PageHeader';
-import ChatBox from '../components/ChatBox';
-import { OneBrainOverlay } from '../components/oneBrainOverlay';
-import Color from 'color';
-import { useRouter } from 'next/router';
 import HelmMap from '../components/helmMap';
 import StrategyCardContainer from '../components/StrategyCardContainer';
 import { SiteModeEvents, MapEvents, SiteModes } from '../utils/events';
 import { TextLayer, ScatterplotLayer, GeoJsonLayer } from '@deck.gl/layers';
 import { AnimatePresence, motion, useAnimationControls } from 'framer-motion';
-
-import ecuadorOutline from '../data/Ecuador.json';
-
-import arrQuitoPocs from '../data/KitKatPocs.json';
+import arrQuitoPocs from '../data/jsonFile.json';
 import { AMABar } from '../components/AMABar';
 import RightPanel from '../components/RightPanel';
 import { ProductFitLegend, Legend, LegendOption } from '../components/legend';
@@ -69,39 +62,6 @@ function Home({
     });
 
     const [hoverInfo, setHoverInfo] = useState({});
-
-    // geojson
-    const ecuadorLayer = useMemo(
-        () =>
-            new GeoJsonLayer({
-                id: 'geolayer',
-                data: ecuadorOutline,
-                pickable: true,
-                stroked: true,
-                filled: true,
-                extruded: false,
-                lineWidthMinPixels: 1,
-                getLineColor: [150, 150, 150, 255],
-                lineJointRounded: true,
-                getFillColor: d => {
-                    if (hoverInfo?.index === d.properties.order) {
-                        return [...d.properties.fill, 255];
-                    }
-                    return [...d.properties.fill, 130];
-                },
-                onHover: info => {
-                    setHoverInfo({
-                        index: info.index,
-                        x: info.x,
-                        y: info.y,
-                    });
-                },
-                updateTriggers: {
-                    getFillColor: hoverInfo?.index,
-                },
-            }),
-        [ecuadorOutline],
-    );
 
     // main set of markers once the map is zoomed in
     const demoLayer = useMemo(
@@ -416,7 +376,6 @@ function Home({
         </div>
     );
 
-
     // pakistan baby
     const initialMapViewState = {
         bearing: 0,
@@ -426,8 +385,6 @@ function Home({
         zoom: 2.4,
     };
 
-    
-    
     return (
         <div className="light">
             <Head>
@@ -442,7 +399,6 @@ function Home({
                         '!ml-0 max-w-[100vw] overflow-auto': mobile,
                     })}
                 >
-                    {/* {siteMode === SiteModes.Agent ?  : <ChatBox />} */}
                     {/* <StrategyCardContainer /> */}
                     <RightPanel animate={RightPanelControls} variants={RightPanelVariants} />
                     <SimpleGlobe
