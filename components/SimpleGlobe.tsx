@@ -16,7 +16,9 @@ import bbox from '@turf/bbox';
 
 // load json
 import ecuadorOutline from '../data/Ecuador.json';
-import kitKatPocs from '../data/pocsGeoJson.json';
+// import kitKatPocs from '../data/pocsGeoJson.json';
+import kitKatPocs from '../data/AllEcuadorPocsGeoJson.json';
+import ecuadorProvincesOutline from '../data/ecuador-with-regions.json';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -47,6 +49,9 @@ const SimpleGlobe = ({ mapStyle, mapboxToken, viewState }) => {
         ecuadorOutline as FeatureCollection;
     const kitKatPocsGeoJson: FeatureCollection<Geometry, GeoJsonProperties> =
         kitKatPocs as FeatureCollection;
+
+    const ecuadorProvinceGeoJson: FeatureCollection<Geometry, GeoJsonProperties> =
+        ecuadorProvincesOutline as FeatureCollection;
 
     // easing the rotation of the globe to ecuador
     const easingFunctions = {
@@ -117,11 +122,11 @@ const SimpleGlobe = ({ mapStyle, mapboxToken, viewState }) => {
         id: 'ecPocs',
         type: 'circle',
         paint: {
-            'circle-color': '#868686',
+            'circle-color': '#F11B97',
             'circle-radius': 4,
-            'circle-stroke-width': 1,
+            'circle-stroke-width': 0,
             'circle-stroke-color': '#868686',
-            'circle-opacity': 0.3,
+            'circle-opacity': 0.2,
         },
     };
 
@@ -279,9 +284,11 @@ const SimpleGlobe = ({ mapStyle, mapboxToken, viewState }) => {
                 attributionControl={false}
                 interactiveLayerIds={['ecuador-fill']}
             >
-                {/* <Marker longitude={-78.4678} latitude={-0.1807} color="red" />
-                 */}
-                <Source type="geojson" data={ecuadorGeoJson}>
+                {/* <Source type="geojson" data={ecuadorGeoJson}>
+                    <Layer {...ecFillLayer} />
+                    <Layer {...outlineLayer} />
+                </Source> */}
+                <Source type="geojson" data={ecuadorProvinceGeoJson}>
                     <Layer {...ecFillLayer} />
                     <Layer {...outlineLayer} />
                 </Source>
